@@ -1,1 +1,3 @@
 pyinstaller
+rpa
+wheel
