@@ -8,7 +8,6 @@ class Database:
         self.connection = sqlite3.connect("database.db")
         self.cursor = None
         self.query = None
-        self.model = None
 
     def start(self) -> None:
         self.cursor = self.connection.cursor()
@@ -17,7 +16,7 @@ class Database:
         self.connection.commit()
         self.connection.close()
 
-    def insert(self, model, obj_model):
+    def insert(self, obj_model):
         try:
             values_str, cols_values, objs_variables = "", "", vars(obj_model)
             objs_variables.remove('dataConnection', 'modelTable')
@@ -28,51 +27,46 @@ class Database:
             for cols_value in objs_variables:
                 cols_values = cols_values + ',' + cols_value
 
-            self.query = f'insert into {model} ({values_str}) values({values_str})'
+            self.query = f'insert into {obj_model.get_model_table()} ({cols_values}) values({values_str})'
             self.cursor.execute(self.query)
             rows = self.cursor.fetchall()
             self.connection.commit()
             self.connection.close()
 
             return rows
-
-
-
         except ValueError as error:
             print(error)
 
-    def update(self, obj_model):
+    def update(self, obj_model, str_set):
         try:
-            values_str, cols_values, objs_variables = "", "", vars(obj_model)
-            objs_variables.remove('dataConnection', 'modelTable', 'modelCreated')
-
-            for value in obj_model.get_all_values():
-                values_str = values_str + ',' + value
-
-            for cols_value in objs_variables:
-                cols_values = cols_values + ',' + cols_value
-
-            self.query = f'update {obj_model.modelTable} set title=?,author=?,year=?,isbn=? where id=?  ({values_str}) values({values_str})'
-
-            self.cursor.execute()
-
+            self.query = f'update {obj_model.modelTable} set {str_set} where id= {obj_model.get_id()}'
+            self.cursor.execute(self.query)
             self.connection.commit()
             self.connection.close()
 
         except ValueError as error:
             print(error)
 
-    def delete(self):
-        pass
+    def delete(self, obj_model):
+        try:
+            self.query = f'DELETE FROM {obj_model.get_model_table()} WHERE id={obj_model.get_id()}'
+            self.cursor.execute(self.query)
+            self.connection.commit()
+            self.connection.close()
 
-    def run_query(self, model, query):
-        self.model = model
-        self.query = query
+        except ValueError as error:
+            print(error)
 
-        self.cursor = self.connection.cursor()
-        self.cursor.execute(self.query)
-        self.connection.commit()
-        self.connection.close()
+    def run_query(self, query):
+        try:
+            self.query = query
+
+            self.cursor = self.connection.cursor()
+            self.cursor.execute(self.query)
+            self.connection.commit()
+            self.connection.close()
+        except Exception as error:
+            print(error)
 
 
 

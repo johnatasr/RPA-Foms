@@ -47,11 +47,14 @@ class Input:
         else:
             return f"Empty Model: {self.__name__}"
 
+    def format_update_set(self):
+        return f"name={Input.get_name()},key={Input.get_key()},value={Input.get_value()}"
+
     def create(self, name, key, value):
         Input.set_name(name)
         Input.set_key(key)
         Input.set_value(value)
-        created_params = self.dataConnection.insert(self.modelTable, Input())
+        created_params = self.dataConnection.insert(Input())
         Input.__set_id(created_params['id'])
         self.modelCreated = True
 
@@ -59,7 +62,7 @@ class Input:
         Input.set_name(name)
         Input.set_key(key)
         Input.set_value(value)
-        self.dataConnection.update(Input())
+        self.dataConnection.update(Input(), self.format_update_set())
 
     def delete(self):
         self.dataConnection.delete(self.get_id())
