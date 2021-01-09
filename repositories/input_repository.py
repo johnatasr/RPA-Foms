@@ -6,10 +6,10 @@ class InputRepository:
         self.model = InputModel()
 
     def get_all(self):
-        return self.get_all()
+        return self.model.get_all()
 
-    def get_key(self):
-        return self.__key
+    def insert_input(self, ):
+        return self.model.
 
     def get_value(self):
         return self.__value
