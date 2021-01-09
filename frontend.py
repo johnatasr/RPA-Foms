@@ -4,7 +4,7 @@ Book name, ISBN, Year, Author
 Users can Add,Update,Delete Books information
 Users also can search all details or using basic details
 """
-from tkinter import *
+from tkinter import Tk, END, Label, StringVar, Entry, Scrollbar, Button, Listbox
 from models import backend
 import rpa as r
 

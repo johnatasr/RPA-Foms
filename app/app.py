@@ -1,130 +1,178 @@
 import tkinter as tk
 import tkinter.font as tkFont
+from repositories import input_repository as InputRepository
 
 
 class App:
     def __init__(self, root):
+
+        self.url: str = tk.StringVar()
+        self.input: str = tk.StringVar()
+        self.value: str = tk.StringVar()
+
         #setting title
-        root.title("RPA Forms")
+        root.title("RPA Forms v1.0")
         #setting window size
-        width=610
-        height=558
+        width=600
+        height=500
         screenwidth = root.winfo_screenwidth()
         screenheight = root.winfo_screenheight()
         alignstr = '%dx%d+%d+%d' % (width, height, (screenwidth - width) / 2, (screenheight - height) / 2)
         root.geometry(alignstr)
         root.resizable(width=False, height=False)
 
-        GLineEdit_625=tk.Entry(root)
-        GLineEdit_625["borderwidth"] = "1px"
-        ft = tkFont.Font(family='Times',size=10)
-        GLineEdit_625["font"] = ft
-        GLineEdit_625["fg"] = "#393d49"
-        GLineEdit_625["justify"] = "center"
-        GLineEdit_625["text"] = "Entry"
-        GLineEdit_625.place(x=30,y=140,width=200,height=30)
+        GLabel_185=tk.Label(root)
+        ft = tkFont.Font(family='Times',size=13)
+        GLabel_185["font"] = ft
+        GLabel_185["fg"] = "#333333"
+        GLabel_185["justify"] = "center"
+        GLabel_185["text"] = "Input"
+        GLabel_185.place(x=30,y=110,width=183,height=30)
 
-        GButton_808=tk.Button(root)
-        GButton_808["bg"] = "#1e90ff"
-        GButton_808["cursor"] = "sizing"
-        ft = tkFont.Font(family='Times',size=10)
-        GButton_808["font"] = ft
-        GButton_808["fg"] = "#f9f9f9"
-        GButton_808["justify"] = "center"
-        GButton_808["text"] = "Adicionar"
-        GButton_808.place(x=460,y=140,width=122,height=30)
-        GButton_808["command"] = self.GButton_808_command
+        GLabel_3=tk.Label(root)
+        ft = tkFont.Font(family='Times',size=13)
+        GLabel_3["font"] = ft
+        GLabel_3["fg"] = "#333333"
+        GLabel_3["justify"] = "center"
+        GLabel_3["text"] = "Valor "
+        GLabel_3.place(x=240,y=110,width=186,height=30)
 
-        GLineEdit_888=tk.Entry(root)
-        GLineEdit_888["borderwidth"] = "1px"
-        ft = tkFont.Font(family='Times',size=10)
-        GLineEdit_888["font"] = ft
-        GLineEdit_888["fg"] = "#393d49"
-        GLineEdit_888["justify"] = "center"
-        GLineEdit_888["text"] = "Entry"
-        GLineEdit_888.place(x=250,y=140,width=197,height=30)
-
-        GLabel_170=tk.Label(root)
-        GLabel_170["cursor"] = "target"
+        GLabel_465=tk.Label(root)
         ft = tkFont.Font(family='Times',size=18)
-        GLabel_170["font"] = ft
-        GLabel_170["fg"] = "#393d49"
-        GLabel_170["justify"] = "center"
-        GLabel_170["text"] = "Input Name"
-        GLabel_170["relief"] = "sunken"
-        GLabel_170.place(x=70,y=90,width=122,height=30)
+        GLabel_465["font"] = ft
+        GLabel_465["fg"] = "#333333"
+        GLabel_465["justify"] = "center"
+        GLabel_465["text"] = "RPA Forms"
+        GLabel_465.place(x=30,y=20,width=534,height=30)
 
-        GListBox_520=tk.Listbox(root)
-        GListBox_520["borderwidth"] = "1px"
+        GLineEdit_980=tk.Entry(root)
+        GLineEdit_980["borderwidth"] = "1px"
         ft = tkFont.Font(family='Times',size=10)
-        GListBox_520["font"] = ft
-        GListBox_520["fg"] = "#393d49"
-        GListBox_520["justify"] = "center"
-        GListBox_520.place(x=30,y=210,width=374,height=301)
+        GLineEdit_980["font"] = ft
+        GLineEdit_980["fg"] = "#333333"
+        GLineEdit_980["justify"] = "center"
+        GLineEdit_980["text"] = "url"
+        GLineEdit_980.place(x=30,y=70,width=531,height=30)
 
-        GLabel_286=tk.Label(root)
-        ft = tkFont.Font(family='Times',size=18)
-        GLabel_286["font"] = ft
-        GLabel_286["fg"] = "#393d49"
-        GLabel_286["justify"] = "center"
-        GLabel_286["text"] = "Valor"
-        GLabel_286.place(x=310,y=90,width=70,height=25)
-
-        GButton_214=tk.Button(root)
-        GButton_214["bg"] = "#1e90ff"
+        GLineEdit_792=tk.Entry(root)
+        GLineEdit_792["borderwidth"] = "1px"
         ft = tkFont.Font(family='Times',size=10)
-        GButton_214["font"] = ft
-        GButton_214["fg"] = "#f2f3f7"
-        GButton_214["justify"] = "center"
-        GButton_214["text"] = "Atualizar"
-        GButton_214.place(x=460,y=180,width=123,height=30)
-        GButton_214["command"] = self.GButton_214_command
+        GLineEdit_792["font"] = ft
+        GLineEdit_792["fg"] = "#333333"
+        GLineEdit_792["justify"] = "center"
+        GLineEdit_792["text"] = "url"
+        GLineEdit_792.place(x=30,y=140,width=183,height=30)
 
-        GButton_555=tk.Button(root)
-        GButton_555["bg"] = "#f74914"
+        GLineEdit_546=tk.Entry(root)
+        GLineEdit_546["borderwidth"] = "1px"
         ft = tkFont.Font(family='Times',size=10)
-        GButton_555["font"] = ft
-        GButton_555["fg"] = "#f1ecec"
-        GButton_555["justify"] = "center"
-        GButton_555["text"] = "Deletar "
-        GButton_555.place(x=460,y=220,width=125,height=30)
-        GButton_555["command"] = self.GButton_555_command
+        GLineEdit_546["font"] = ft
+        GLineEdit_546["fg"] = "#333333"
+        GLineEdit_546["justify"] = "center"
+        GLineEdit_546["text"] = "value"
+        GLineEdit_546.place(x=240,y=140,width=185,height=30)
 
-        GButton_952=tk.Button(root)
-        GButton_952["bg"] = "#5fb878"
+        GButton_898=tk.Button(root)
+        GButton_898["bg"] = "#efefef"
         ft = tkFont.Font(family='Times',size=10)
-        GButton_952["font"] = ft
-        GButton_952["fg"] = "#f5f1f1"
-        GButton_952["justify"] = "center"
-        GButton_952["text"] = "Executar"
-        GButton_952.place(x=450,y=400,width=127,height=63)
-        GButton_952["command"] = self.GButton_952_command
+        GButton_898["font"] = ft
+        GButton_898["fg"] = "#000000"
+        GButton_898["justify"] = "center"
+        GButton_898["text"] = "Novo"
+        GButton_898.place(x=480,y=140,width=84,height=30)
+        GButton_898["command"] = self.GButton_898_command
 
-        GLabel_163=tk.Label(root)
-        ft = tkFont.Font(family='Times',size=18)
-        GLabel_163["font"] = ft
-        GLabel_163["fg"] = "#393d49"
-        GLabel_163["justify"] = "center"
-        GLabel_163["text"] = "Adicione o nome do input do formulario e valor"
-        GLabel_163.place(x=50,y=20,width=503,height=37)
+        GButton_728=tk.Button(root)
+        GButton_728["bg"] = "#efefef"
+        ft = tkFont.Font(family='Times',size=10)
+        GButton_728["font"] = ft
+        GButton_728["fg"] = "#000000"
+        GButton_728["justify"] = "center"
+        GButton_728["text"] = "Atualizar"
+        GButton_728.place(x=480,y=170,width=84,height=30)
+        GButton_728["command"] = self.GButton_728_command
 
-    def GButton_808_command(self):
+        GButton_812=tk.Button(root)
+        GButton_812["bg"] = "#efefef"
+        ft = tkFont.Font(family='Times',size=10)
+        GButton_812["font"] = ft
+        GButton_812["fg"] = "#000000"
+        GButton_812["justify"] = "center"
+        GButton_812["text"] = "Deletar"
+        GButton_812.place(x=480,y=200,width=84,height=30)
+        GButton_812["command"] = self.GButton_812_command
+
+        GListBox_212=tk.Listbox(root)
+        GListBox_212["borderwidth"] = "1px"
+        ft = tkFont.Font(family='Times',size=10)
+        GListBox_212["font"] = ft
+        GListBox_212["fg"] = "#333333"
+        GListBox_212["justify"] = "center"
+        GListBox_212.place(x=30,y=200,width=396,height=260)
+        self.listBox = GListBox_212
+
+        GButton_618=tk.Button(root)
+        GButton_618["bg"] = "#efefef"
+        ft = tkFont.Font(family='Times',size=10)
+        GButton_618["font"] = ft
+        GButton_618["fg"] = "#000000"
+        GButton_618["justify"] = "center"
+        GButton_618["text"] = "Executar"
+        GButton_618.place(x=480,y=320,width=88,height=54)
+        GButton_618["command"] = self.GButton_618_command
+
+        GButton_324=tk.Button(root)
+        GButton_324["bg"] = "#efefef"
+        ft = tkFont.Font(family='Times',size=10)
+        GButton_324["font"] = ft
+        GButton_324["fg"] = "#000000"
+        GButton_324["justify"] = "center"
+        GButton_324["text"] = "Resetar"
+        GButton_324.place(x=480,y=420,width=70,height=25)
+        GButton_324["command"] = self.GButton_324_command
+
+    def insert_command(self):
         print("command")
 
-
-    def GButton_214_command(self):
+    def update_command(self):
         print("command")
 
-
-    def GButton_555_command(self):
+    def delete_command(self):
         print("command")
 
-
-    def GButton_952_command(self):
+    def execute_command(self):
         print("command")
 
+    def reset_command(self):
+        print("command")
 
-if __name__ == '__main__':
+    def load_command(self):
+        self.listBox.delete(0, tk.END)
+        for row in InputRepository.get_all():
+            self.listBox.insert(tk.END, row)
+
+if __name__ == "__main__":
     root = tk.Tk()
     app = App(root)
     root.mainloop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

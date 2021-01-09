@@ -12,14 +12,24 @@ class Database:
     def start(self) -> None:
         self.cursor = self.connection.cursor()
         self.query =  "CREATE TABLE IF NOT EXISTS input (id INTEGER PRIMARY KEY, name VARCHAR(200), key VARCHAR(200), value VARCHAR(4)"
-        self.cursor.execute(self.query)
-        self.connection.commit()
-        self.connection.close()
+        self.__run_query(self.query)
+
+    def select(self, obj_model, args):
+        try:
+            if args:
+                self.query = f'select * from {obj_model.get_model_table()} {args}'
+
+            self.query = f'select * from {obj_model.get_model_table()}'
+            rows = self.__run_query_with_return(self.query)
+
+            return rows
+        except ValueError as error:
+            print(error)
 
     def insert(self, obj_model):
         try:
             values_str, cols_values, objs_variables = "", "", vars(obj_model)
-            objs_variables.remove('dataConnection', 'modelTable')
+            objs_variables.remove('dataConnection', 'modelTable', 'modelCreated')
 
             for value in obj_model.get_all_values():
                 values_str = values_str + ',' + value
@@ -28,10 +38,7 @@ class Database:
                 cols_values = cols_values + ',' + cols_value
 
             self.query = f'insert into {obj_model.get_model_table()} ({cols_values}) values({values_str})'
-            self.cursor.execute(self.query)
-            rows = self.cursor.fetchall()
-            self.connection.commit()
-            self.connection.close()
+            rows = self.__run_query_with_return(self.query)
 
             return rows
         except ValueError as error:
@@ -40,9 +47,8 @@ class Database:
     def update(self, obj_model, str_set):
         try:
             self.query = f'update {obj_model.modelTable} set {str_set} where id= {obj_model.get_id()}'
-            self.cursor.execute(self.query)
-            self.connection.commit()
-            self.connection.close()
+            self.run_query(self.query)
+            self.query = None
 
         except ValueError as error:
             print(error)
@@ -50,23 +56,35 @@ class Database:
     def delete(self, obj_model):
         try:
             self.query = f'DELETE FROM {obj_model.get_model_table()} WHERE id={obj_model.get_id()}'
-            self.cursor.execute(self.query)
-            self.connection.commit()
-            self.connection.close()
+            self.run_query(self.query)
+            self.query = None
 
         except ValueError as error:
             print(error)
 
-    def run_query(self, query):
+    def __run_query_with_return(self, query):
         try:
-            self.query = query
-
             self.cursor = self.connection.cursor()
-            self.cursor.execute(self.query)
+            self.cursor.execute(query)
+            rows = self.cursor.fetchall()
             self.connection.commit()
             self.connection.close()
+
+            return rows
+
         except Exception as error:
             print(error)
+
+    def __run_query(self, query):
+        try:
+            self.cursor = self.connection.cursor()
+            self.cursor.execute(query)
+            self.connection.commit()
+            self.connection.close()
+
+        except Exception as error:
+            print(error)
+
 
 
 

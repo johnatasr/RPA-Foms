@@ -39,7 +39,10 @@ class Input:
         return self.modelTable
 
     def get_by_id(self):
-        pass
+        return self.dataConnection.select(Input(), f'where id = {self.get_id()}')
+
+    def get_all(self):
+        return self.dataConnection.select(Input())
 
     def get_all_values(self):
         if not all(self.__name, self.__key, self.__value):
