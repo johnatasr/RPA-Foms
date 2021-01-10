@@ -9,6 +9,8 @@ class App:
         self.url: str = tk.StringVar()
         self.input: str = tk.StringVar()
         self.value: str = tk.StringVar()
+        self.msg: str = tk.StringVar()
+        self.selected_row = None
 
         #setting title
         root.title("RPA Forms v1.0")
@@ -61,6 +63,7 @@ class App:
         GLineEdit_980["justify"] = "center"
         GLineEdit_980["text"] = "url"
         GLineEdit_980.place(x=30,y=70,width=531,height=30)
+        self.url = GLineEdit_980
 
         GLineEdit_792=tk.Entry(root)
         GLineEdit_792["borderwidth"] = "1px"
@@ -68,8 +71,9 @@ class App:
         GLineEdit_792["font"] = ft
         GLineEdit_792["fg"] = "#333333"
         GLineEdit_792["justify"] = "center"
-        GLineEdit_792["text"] = "url"
+        GLineEdit_792["text"] = "key"
         GLineEdit_792.place(x=30,y=140,width=183,height=30)
+        self.key = GLineEdit_792
 
         GLineEdit_546=tk.Entry(root)
         GLineEdit_546["borderwidth"] = "1px"
@@ -79,6 +83,7 @@ class App:
         GLineEdit_546["justify"] = "center"
         GLineEdit_546["text"] = "value"
         GLineEdit_546.place(x=240,y=140,width=185,height=30)
+        self.value = GLineEdit_546
 
         GButton_898=tk.Button(root)
         GButton_898["bg"] = "#efefef"
@@ -139,13 +144,29 @@ class App:
         GButton_324.place(x=480,y=420,width=70,height=25)
         GButton_324["command"] = self.reset_command()
 
-    def insert_command(self):
-        if (self.url.get() != "" and self.input.get() != "" and self.value.get() != ""):
-            InputRepository.add
+    @property
+    def msg(self) -> str:
+        return self.msg
 
+    @msg.setter
+    def msg(self, msg: str) -> str:
+        self.msg = msg
+
+    def insert_command(self):
+        if (self.url.get() != "" and self.key.get() != "" and self.value.get() != ""):
+            InputRepository.create(self.url.get(), self.key.get(), self.value.get())
+            self.reset_inputs()
+            self.load_command()
+        else:
+            self.msg = "Valores inválidos"
 
     def update_command(self):
-        print("command")
+        if (self.url.get() != "" and self.key.get() != "" and self.value.get() != ""):
+            InputRepository.FormModel().create_model(self.url.get(), self.key.get(), self.value.get())
+            self.reset_inputs()
+            self.load_command()
+        else:
+            self.msg = "Valores inválidos"
 
     def delete_command(self):
         print("command")
@@ -160,6 +181,22 @@ class App:
         self.listBox.delete(0, tk.END)
         for row in InputRepository.get_all():
             self.listBox.insert(tk.END, row)
+
+    def get_selected_row(self, event):
+        try:
+            index = self.listBox.curselection()[0]
+            selected_row = self.listBox.get(index)
+            self.url.set(selected_row[1])
+            self.key.set(selected_row[2])
+            self.value.set(selected_row[3])
+        except IndexError:
+            print("No selected row")
+
+    @classmethod
+    def reset_inputs(cls):
+        cls.url.set("")
+        cls.key.set("")
+        cls.value.set("")
 
 if __name__ == "__main__":
     root = tk.Tk()

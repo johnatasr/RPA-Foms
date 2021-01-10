@@ -1,5 +1,5 @@
 import sqlite3
-from models import input
+from models import form
 
 
 class Database:
@@ -9,10 +9,9 @@ class Database:
         self.cursor = None
         self.query = None
 
-    def start(self) -> None:
+    def start(self, query) -> None:
         self.cursor = self.connection.cursor()
-        self.query =  "CREATE TABLE IF NOT EXISTS input (id INTEGER PRIMARY KEY, name VARCHAR(200), key VARCHAR(200), value VARCHAR(4)"
-        self.__run_query(self.query)
+        self.__run_query(query)
 
     def select(self, obj_model, args):
         try:
