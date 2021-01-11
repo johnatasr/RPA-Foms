@@ -1,6 +1,6 @@
 import tkinter as tk
 import tkinter.font as tkFont
-from repositories import input_repository as InputRepository
+from repositories import form_repository as InputRepository
 
 
 class App:
@@ -169,7 +169,9 @@ class App:
             self.msg = "Valores inválidos"
 
     def delete_command(self):
-        print("command")
+        InputRepository.delete(self.selected_row[0])
+        self.reset_command()
+        self.load_command()
 
     def execute_command(self):
         print("command")
@@ -185,10 +187,10 @@ class App:
     def get_selected_row(self, event):
         try:
             index = self.listBox.curselection()[0]
-            selected_row = self.listBox.get(index)
-            self.url.set(selected_row[1])
-            self.key.set(selected_row[2])
-            self.value.set(selected_row[3])
+            self.selected_row = self.listBox.get(index)
+            self.url.set(self.selected_row[1])
+            self.key.set(self.selected_row[2])
+            self.value.set(self.selected_row[3])
         except IndexError:
             print("No selected row")
 

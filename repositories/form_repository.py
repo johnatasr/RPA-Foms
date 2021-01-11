@@ -2,7 +2,7 @@ from models import form as FormModel
 from connections import database as DB
 
 
-class InputRepository:
+class FormRepository:
     def __init__(self):
         self.dataConnection: object = DB()
         self.model: object = FormModel()
