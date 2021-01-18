@@ -1,13 +1,13 @@
 import tkinter as tk
 import tkinter.font as tkFont
-from repositories import form_repository as InputRepository
+from repositories.form_repository import FormRepository
 
 
-class App:
+class App():
     def __init__(self, root):
 
         self.url: str = tk.StringVar()
-        self.input: str = tk.StringVar()
+        self.key: str = tk.StringVar()
         self.value: str = tk.StringVar()
         self.msg: str = tk.StringVar()
         self.selected_row = None
@@ -85,7 +85,7 @@ class App:
         GLineEdit_546.place(x=240,y=140,width=185,height=30)
         self.value = GLineEdit_546
 
-        GButton_898=tk.Button(root)
+        GButton_898=tk.Button(root, command=self.insert_command())
         GButton_898["bg"] = "#efefef"
         ft = tkFont.Font(family='Times',size=10)
         GButton_898["font"] = ft
@@ -144,34 +144,25 @@ class App:
         GButton_324.place(x=480,y=420,width=70,height=25)
         GButton_324["command"] = self.reset_command()
 
-    @property
-    def msg(self) -> str:
-        return self.msg
-
-    @msg.setter
-    def msg(self, msg: str) -> str:
-        self.msg = msg
 
     def insert_command(self):
         if (self.url.get() != "" and self.key.get() != "" and self.value.get() != ""):
-            InputRepository.create(self.url.get(), self.key.get(), self.value.get())
+            FormRepository.create(self.url.get(), self.key.get(), self.value.get())
             self.reset_inputs()
             self.load_command()
-        else:
-            self.msg = "Valores inválidos"
+
 
     def update_command(self):
         if (self.url.get() != "" and self.key.get() != "" and self.value.get() != ""):
-            InputRepository.FormModel().create_model(self.url.get(), self.key.get(), self.value.get())
+            FormRepository.FormModel().create_model(self.url.get(), self.key.get(), self.value.get())
             self.reset_inputs()
             self.load_command()
-        else:
-            self.msg = "Valores inválidos"
 
     def delete_command(self):
-        InputRepository.delete(self.selected_row[0])
-        self.reset_command()
-        self.load_command()
+        if self.selected_row is not None:
+            FormRepository.delete(self.selected_row[0])
+            self.reset_command()
+            self.load_command()
 
     def execute_command(self):
         print("call rpa")
@@ -181,7 +172,7 @@ class App:
 
     def load_command(self):
         self.listBox.delete(0, tk.END)
-        for row in InputRepository.get_all():
+        for row in FormRepository.get_all():
             self.listBox.insert(tk.END, row)
 
     def get_selected_row(self, event):
@@ -199,11 +190,6 @@ class App:
         cls.url.set("")
         cls.key.set("")
         cls.value.set("")
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = App(root)
-    root.mainloop()
 
 
 
