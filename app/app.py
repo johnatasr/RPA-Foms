@@ -174,10 +174,10 @@ class App:
         self.load_command()
 
     def execute_command(self):
-        print("command")
+        print("call rpa")
 
     def reset_command(self):
-        print("command")
+        print("call reset")
 
     def load_command(self):
         self.listBox.delete(0, tk.END)
