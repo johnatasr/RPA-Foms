@@ -47,13 +47,13 @@ class App():
         GLabel_465["text"] = "RPA Forms"
         GLabel_465.place(x=30,y=20,width=534,height=30)
 
-        GLabel_465 = tk.Label(root)
+        GLabel_469 = tk.Label(root)
         ft = tkFont.Font(family='Times', size=14)
-        GLabel_465["font"] = ft
-        GLabel_465["fg"] = "#333333"
-        GLabel_465["justify"] = "center"
-        GLabel_465["text"] = "Digite a URL"
-        GLabel_465.place(x=30, y=45, width=534, height=30)
+        GLabel_469["font"] = ft
+        GLabel_469["fg"] = "#333333"
+        GLabel_469["justify"] = "center"
+        GLabel_469["text"] = "Digite a URL"
+        GLabel_469.place(x=30, y=45, width=534, height=30)
 
         GLineEdit_980=tk.Entry(root)
         GLineEdit_980["borderwidth"] = "1px"
@@ -85,7 +85,7 @@ class App():
         GLineEdit_546.place(x=240,y=140,width=185,height=30)
         self.value = GLineEdit_546
 
-        GButton_898=tk.Button(root, command=self.insert_command())
+        GButton_898=tk.Button(root)
         GButton_898["bg"] = "#efefef"
         ft = tkFont.Font(family='Times',size=10)
         GButton_898["font"] = ft
@@ -93,7 +93,8 @@ class App():
         GButton_898["justify"] = "center"
         GButton_898["text"] = "Novo"
         GButton_898.place(x=480,y=140,width=84,height=30)
-        GButton_898["command"] = self.insert_command()
+        GButton_898["command"] = self.insert_command
+
 
         GButton_728=tk.Button(root)
         GButton_728["bg"] = "#efefef"
@@ -103,7 +104,7 @@ class App():
         GButton_728["justify"] = "center"
         GButton_728["text"] = "Atualizar"
         GButton_728.place(x=480,y=170,width=84,height=30)
-        GButton_728["command"] = self.update_command()
+        GButton_728["command"] = self.update_command
 
         GButton_812=tk.Button(root)
         GButton_812["bg"] = "#efefef"
@@ -113,7 +114,7 @@ class App():
         GButton_812["justify"] = "center"
         GButton_812["text"] = "Deletar"
         GButton_812.place(x=480,y=200,width=84,height=30)
-        GButton_812["command"] = self.delete_command()
+        GButton_812["command"] = self.delete_command
 
         GListBox_212=tk.Listbox(root)
         GListBox_212["borderwidth"] = "1px"
@@ -132,7 +133,7 @@ class App():
         GButton_618["justify"] = "center"
         GButton_618["text"] = "Executar"
         GButton_618.place(x=480,y=320,width=88,height=54)
-        GButton_618["command"] = self.execute_command()
+        GButton_618["command"] = self.execute_command
 
         GButton_324=tk.Button(root)
         GButton_324["bg"] = "#efefef"
@@ -142,27 +143,30 @@ class App():
         GButton_324["justify"] = "center"
         GButton_324["text"] = "Resetar"
         GButton_324.place(x=480,y=420,width=70,height=25)
-        GButton_324["command"] = self.reset_command()
+        GButton_324["command"] = self.reset_command
 
 
     def insert_command(self):
-        if (self.url.get() != "" and self.key.get() != "" and self.value.get() != ""):
-            FormRepository.create(self.url.get(), self.key.get(), self.value.get())
-            self.reset_inputs()
-            self.load_command()
+        print("Insert")
+        # if (self.url.get() != "" and self.key.get() != "" and self.value.get() != ""):
+        #     FormRepository.create(self.url.get(), self.key.get(), self.value.get())
+        #     self.reset_inputs()
+        #     self.load_command()
 
 
     def update_command(self):
-        if (self.url.get() != "" and self.key.get() != "" and self.value.get() != ""):
-            FormRepository.FormModel().create_model(self.url.get(), self.key.get(), self.value.get())
-            self.reset_inputs()
-            self.load_command()
+        print("update command")
+        # if (self.url.get() != "" and self.key.get() != "" and self.value.get() != ""):
+        #     FormRepository.FormModel().create_model(self.url.get(), self.key.get(), self.value.get())
+        #     self.reset_inputs()
+        #     self.load_command()
 
     def delete_command(self):
-        if self.selected_row is not None:
-            FormRepository.delete(self.selected_row[0])
-            self.reset_command()
-            self.load_command()
+        print("delete command")
+        # if self.selected_row is not None:
+        #     FormRepository.delete(self.selected_row[0])
+        #     self.reset_command()
+        #     self.load_command()
 
     def execute_command(self):
         print("call rpa")
@@ -187,10 +191,10 @@ class App():
 
     @classmethod
     def reset_inputs(cls):
+        print("reset")
         cls.url.set("")
         cls.key.set("")
         cls.value.set("")
-
 
 
 
