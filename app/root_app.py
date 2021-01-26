@@ -3,7 +3,7 @@ import tkinter.font as tkFont
 from repositories.form_repository import FormRepository
 
 
-class App():
+class App:
     def __init__(self, root):
 
         self.url: str = tk.StringVar()
@@ -145,6 +145,7 @@ class App():
         GButton_324.place(x=480,y=420,width=70,height=25)
         GButton_324["command"] = self.reset_command
 
+        self.repo = FormRepository
 
     def insert_command(self):
         print("Insert")
@@ -182,12 +183,15 @@ class App():
     def get_selected_row(self, event):
         try:
             index = self.listBox.curselection()[0]
-            self.selected_row = self.listBox.get(index)
-            self.url.set(self.selected_row[1])
-            self.key.set(self.selected_row[2])
-            self.value.set(self.selected_row[3])
+            # self.selected_row = self.listBox.get(inlistBoxdex)
+            # self.url.set(self.selected_row[1])
+            # self.key.set(self.selected_row[2])
+            # self.value.set(self.selected_row[3])
         except IndexError:
             print("No selected row")
+
+    def start_databbase(self):
+        self.repo.create_database()
 
     @classmethod
     def reset_inputs(cls):

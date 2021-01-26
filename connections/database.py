@@ -8,10 +8,10 @@ class Database:
         self.connection = sqlite3.connect("database.db")
         self.cursor = None
         self.query = None
+        self.start()
 
-    def start(self, query) -> None:
+    def start(self) -> None:
         self.cursor = self.connection.cursor()
-        self.__run_query(query)
 
     def select(self, obj_model, args):
         try:
