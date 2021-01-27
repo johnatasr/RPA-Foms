@@ -1,32 +1,25 @@
-from models import form as FormModel
-from connections import database as DB
+from models.form import Form
+from connections.database import Database as DB
 
 
 class FormRepository:
     def __init__(self):
-        self.dataConnection: object = DB()
-        self.model: object = FormModel()
+        self.dataConnection = DB()
+        self.model: object = Form()
         self.listObjects: list = []
 
     def create_database(self) -> None:
-        query: str = "CREATE TABLE IF NOT EXISTS form input ( " \
-                     "id INTEGER PRIMARY KEY, " \
-                     "url VARCHAR(500), " \
-                     "key VARCHAR(200), " \
-                     "value VARCHAR(200)"
-        self.dataConnection.start(query)
+        self.dataConnection.start(self.model.create_table())
 
     def get_all(self) -> list:
-        return self.dataConnection.select(self.model.get_model_table(), None)
+        return self.dataConnection.select(self.model, None)
 
     def get_by_id(self, id: str) -> list:
         self.model.__set_id(id)
         return self.dataConnection.select(self.model, f'where id = {self.model.get_id()}')
 
     def create(self, url: str, key: str, value: str) -> str:
-        self.model.set_url(url)
-        self.model.set_key(key)
-        self.model.set_value(value)
+        self.model.create_model(url, key, value)
         created_params: list = self.dataConnection.insert(self.model)
 
         if 'id' in created_params:

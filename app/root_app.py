@@ -145,14 +145,14 @@ class App:
         GButton_324.place(x=480,y=420,width=70,height=25)
         GButton_324["command"] = self.reset_command
 
-        self.repo = FormRepository
+        self.repo = FormRepository()
 
     def insert_command(self):
         print("Insert")
-        # if (self.url.get() != "" and self.key.get() != "" and self.value.get() != ""):
-        #     FormRepository.create(self.url.get(), self.key.get(), self.value.get())
-        #     self.reset_inputs()
-        #     self.load_command()
+        if (self.url.get() != "" and self.key.get() != "" and self.value.get() != ""):
+            self.repo.create(self.url.get(), self.key.get(), self.value.get())
+            self.reset_inputs()
+            self.load_command()
 
 
     def update_command(self):
@@ -177,7 +177,7 @@ class App:
 
     def load_command(self):
         self.listBox.delete(0, tk.END)
-        for row in FormRepository.get_all():
+        for row in self.repo.get_all():
             self.listBox.insert(tk.END, row)
 
     def get_selected_row(self, event):

@@ -8,10 +8,10 @@ class Database:
         self.connection = sqlite3.connect("database.db")
         self.cursor = None
         self.query = None
-        self.start()
 
-    def start(self) -> None:
+    def start(self, query) -> None:
         self.cursor = self.connection.cursor()
+        self.__run_query(query)
 
     def select(self, obj_model, args):
         try:
@@ -67,7 +67,6 @@ class Database:
             self.cursor.execute(query)
             rows = self.cursor.fetchall()
             self.connection.commit()
-            self.connection.close()
 
             return rows
 
@@ -79,7 +78,6 @@ class Database:
             self.cursor = self.connection.cursor()
             self.cursor.execute(query)
             self.connection.commit()
-            self.connection.close()
 
         except Exception as error:
             print(error)
