@@ -28,7 +28,8 @@ class Database:
     def insert(self, obj_model):
         try:
             values_str, cols_values, objs_variables = "", "", vars(obj_model)
-            objs_variables.remove('dataConnection', 'modelTable', 'modelCreated')
+            for item in ['_Form__id', 'modelCreated', 'modelTable']:
+                del objs_variables[item]
 
             for value in obj_model.get_all_values():
                 values_str = values_str + ',' + value
