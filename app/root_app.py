@@ -191,6 +191,9 @@ class App:
             print("No selected row")
 
     def start_databbase(self):
+        self.url.inssert(tk.END, 'https://www.google.com')
+        self.key.insert(tk.END, '//*[@name="q"]')
+        self.value.insert(tk.END, 'decentralization[enter]')
         self.repo.create_database()
 
     @classmethod
