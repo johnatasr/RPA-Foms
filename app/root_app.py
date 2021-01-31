@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.font as tkFont
 from repositories.form_repository import FormRepository
+from automation.rpa_automation import RPAModule
 
 
 class App:
@@ -120,6 +121,7 @@ class App:
         GListBox_212["justify"] = "center"
         GListBox_212.place(x=30,y=200,width=396,height=260)
         self.listBox = GListBox_212
+        self.listBox.bind('<<ListboxSelect>>', self.get_selected_row)
 
         GButton_618=tk.Button(root)
         GButton_618["bg"] = "#efefef"
@@ -142,14 +144,14 @@ class App:
         GButton_324["command"] = self.reset_command
 
         self.repo = FormRepository()
+        self.rpa = RPAModule()
 
     def insert_command(self):
         print("Insert")
-        if (self.url.get() != "" and self.key.get() != "" and self.value.get() != ""):
+        if ( self.url.get() != "" and self.key.get() != "" and self.value.get() != "" ):
             self.repo.create(self.url.get(), self.key.get(), self.value.get())
-            self.reset_inputs()
             self.load_command()
-
+            self.reset_inputs()
 
     def update_command(self):
         print("update command")
@@ -160,13 +162,14 @@ class App:
 
     def delete_command(self):
         print("delete command")
-        # if self.selected_row is not None:
-        #     FormRepository.delete(self.selected_row[0])
-        #     self.reset_command()
-        #     self.load_command()
+        if self.selected_row is not None:
+            self.repo.delete(self.selected_row[0])
+            self.reset_command()
+            self.load_command()
 
     def execute_command(self):
-        print("call rpa")
+        self.rpa.set_list(self.listBox.select_set(0, tk.END))
+        self.rpa.exec_command()
 
     def reset_command(self):
         print("call reset")
@@ -179,10 +182,10 @@ class App:
     def get_selected_row(self, event):
         try:
             index = self.listBox.curselection()[0]
-            # self.selected_row = self.listBox.get(inlistBoxdex)
-            # self.url.set(self.selected_row[1])
-            # self.key.set(self.selected_row[2])
-            # self.value.set(self.selected_row[3])
+            self.selected_row = self.listBox.get(index)
+            self.url.set(self.selected_row[1])
+            self.key.set(self.selected_row[2])
+            self.value.set(self.selected_row[3])
         except IndexError:
             print("No selected row")
 

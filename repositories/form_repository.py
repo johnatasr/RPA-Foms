@@ -21,7 +21,6 @@ class FormRepository:
     def create(self, url: str, key: str, value: str) -> str:
         self.model.create_model(url, key, value)
         self.dataConnection.insert(self.model)
-        return self.get_all()
 
     def update(self, name: str, key: str, value: str) -> None:
         self.model.set_url(name)
@@ -31,7 +30,5 @@ class FormRepository:
         self.model = None
 
     def delete(self, id: str) -> None:
-        if self.model is not None:
-            self.model = None
-        self.model.__set_id(id)
+        self.model.set_id(id)
         self.dataConnection.delete(self.model)

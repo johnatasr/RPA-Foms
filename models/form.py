@@ -2,7 +2,7 @@
 
 class Form:
     def __init__(self):
-        self.__id = None
+        self.id = None
         self.url = None
         self.key = None
         self.value = None
@@ -12,7 +12,7 @@ class Form:
     def get_id(self):
         return self.id
 
-    def __set_id(self, id):
+    def set_id(self, id):
         self.id = id
 
     def get_url(self):

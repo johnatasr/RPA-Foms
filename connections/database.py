@@ -41,13 +41,15 @@ class Database:
         try:
             values_str, cols_values, objs_variables = '', '', vars(obj_model)
             model_table: str = objs_variables['modelTable']
-            for item in ['_Form__id', 'modelCreated', 'modelTable']:
-                del objs_variables[item]
+            columns = []
+            for item in objs_variables:
+                if item not in ['id', 'modelCreated', 'modelTable']:
+                    columns.append(item)
 
             values_str = self.mount_insert_paramters(
                 obj_model.get_all_values(), values_str)
 
-            cols_values = self.mount_insert_paramters(objs_variables, cols_values)
+            cols_values = self.mount_insert_paramters(columns, cols_values)
 
             self.query = f'insert into {model_table} ({cols_values}) values({values_str})'
             self.__run_query(self.query)
@@ -67,8 +69,7 @@ class Database:
     def delete(self, obj_model):
         try:
             self.query = f'DELETE FROM {obj_model.get_model_table()} WHERE id={obj_model.get_id()}'
-            self.run_query(self.query)
-            self.query = None
+            self.__run_query(self.query)
 
         except ValueError as error:
             print(error)
