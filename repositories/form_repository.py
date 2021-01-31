@@ -20,13 +20,8 @@ class FormRepository:
 
     def create(self, url: str, key: str, value: str) -> str:
         self.model.create_model(url, key, value)
-        created_params: list = self.dataConnection.insert(self.model)
-
-        if 'id' in created_params:
-            self.model.__set_id(created_params['id'])
-            return self.model.get_id()
-
-        self.model = None
+        self.dataConnection.insert(self.model)
+        return self.get_all()
 
     def update(self, name: str, key: str, value: str) -> None:
         self.model.set_url(name)

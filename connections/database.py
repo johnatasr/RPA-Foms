@@ -13,6 +13,18 @@ class Database:
         self.cursor = self.connection.cursor()
         self.__run_query(query)
 
+    @staticmethod
+    def mount_insert_paramters(interact, string_value) -> str:
+        first = True
+        for value in interact:
+            if first:
+                string_value = string_value + f"'{value}'"
+                first = False
+            else:
+                string_value = string_value + ', ' + f"'{value}'"
+
+        return string_value
+
     def select(self, obj_model, args):
         try:
             if args:
@@ -27,20 +39,19 @@ class Database:
 
     def insert(self, obj_model):
         try:
-            values_str, cols_values, objs_variables = "", "", vars(obj_model)
+            values_str, cols_values, objs_variables = '', '', vars(obj_model)
+            model_table: str = objs_variables['modelTable']
             for item in ['_Form__id', 'modelCreated', 'modelTable']:
                 del objs_variables[item]
 
-            for value in obj_model.get_all_values():
-                values_str = values_str + ',' + value
+            values_str = self.mount_insert_paramters(
+                obj_model.get_all_values(), values_str)
 
-            for cols_value in objs_variables:
-                cols_values = cols_values + ',' + cols_value
+            cols_values = self.mount_insert_paramters(objs_variables, cols_values)
 
-            self.query = f'insert into {obj_model.get_model_table()} ({cols_values}) values({values_str})'
-            rows = self.__run_query_with_return(self.query)
+            self.query = f'insert into {model_table} ({cols_values}) values({values_str})'
+            self.__run_query(self.query)
 
-            return rows
         except ValueError as error:
             print(error)
 

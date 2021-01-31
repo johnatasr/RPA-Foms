@@ -6,9 +6,9 @@ from repositories.form_repository import FormRepository
 class App:
     def __init__(self, root):
 
-        self.url: str = tk.StringVar()
-        self.key: str = tk.StringVar()
-        self.value: str = tk.StringVar()
+        self.url: str = tk.StringVar(value='https://www.google.com')
+        self.key: str = tk.StringVar(value='//*[@name="q"]')
+        self.value: str = tk.StringVar(value='decentralization[enter]')
         self.msg: str = tk.StringVar()
         self.selected_row = None
 
@@ -55,7 +55,7 @@ class App:
         GLabel_469["text"] = "Digite a URL"
         GLabel_469.place(x=30, y=45, width=534, height=30)
 
-        GLineEdit_980=tk.Entry(root)
+        GLineEdit_980=tk.Entry(root, textvariable=self.url)
         GLineEdit_980["borderwidth"] = "1px"
         ft = tkFont.Font(family='Times',size=10)
         GLineEdit_980["font"] = ft
@@ -63,9 +63,8 @@ class App:
         GLineEdit_980["justify"] = "center"
         GLineEdit_980["text"] = "url"
         GLineEdit_980.place(x=30,y=70,width=531,height=30)
-        self.url = GLineEdit_980
 
-        GLineEdit_792=tk.Entry(root)
+        GLineEdit_792=tk.Entry(root, textvariable=self.key)
         GLineEdit_792["borderwidth"] = "1px"
         ft = tkFont.Font(family='Times',size=10)
         GLineEdit_792["font"] = ft
@@ -73,9 +72,8 @@ class App:
         GLineEdit_792["justify"] = "center"
         GLineEdit_792["text"] = "key"
         GLineEdit_792.place(x=30,y=140,width=183,height=30)
-        self.key = GLineEdit_792
 
-        GLineEdit_546=tk.Entry(root)
+        GLineEdit_546=tk.Entry(root, textvariable=self.value)
         GLineEdit_546["borderwidth"] = "1px"
         ft = tkFont.Font(family='Times',size=10)
         GLineEdit_546["font"] = ft
@@ -83,7 +81,6 @@ class App:
         GLineEdit_546["justify"] = "center"
         GLineEdit_546["text"] = "value"
         GLineEdit_546.place(x=240,y=140,width=185,height=30)
-        self.value = GLineEdit_546
 
         GButton_898=tk.Button(root)
         GButton_898["bg"] = "#efefef"
@@ -94,7 +91,6 @@ class App:
         GButton_898["text"] = "Novo"
         GButton_898.place(x=480,y=140,width=84,height=30)
         GButton_898["command"] = self.insert_command
-
 
         GButton_728=tk.Button(root)
         GButton_728["bg"] = "#efefef"
@@ -191,9 +187,6 @@ class App:
             print("No selected row")
 
     def start_databbase(self):
-        self.url.inssert(tk.END, 'https://www.google.com')
-        self.key.insert(tk.END, '//*[@name="q"]')
-        self.value.insert(tk.END, 'decentralization[enter]')
         self.repo.create_database()
 
     @classmethod

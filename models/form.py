@@ -37,7 +37,7 @@ class Form:
         return self.modelTable
 
     def get_all_values(self):
-        if not all(self.url, self.key, self.value):
+        if all([self.url, self.key, self.value]):
             return [self.url, self.key, self.value]
         else:
             return f"Empty Model: {self.__name__}"
