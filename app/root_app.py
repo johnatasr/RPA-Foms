@@ -6,7 +6,6 @@ from automation.rpa_automation import RPAModule
 
 class App:
     def __init__(self, root):
-
         self.url: str = tk.StringVar(value='https://www.google.com')
         self.key: str = tk.StringVar(value='//*[@name="q"]')
         self.value: str = tk.StringVar(value='decentralization[enter]')
@@ -121,7 +120,7 @@ class App:
         GListBox_212["justify"] = "center"
         GListBox_212.place(x=30,y=200,width=396,height=260)
         self.listBox = GListBox_212
-        self.listBox.bind('<<ListboxSelect>>', self.get_selected_row)
+
 
         GButton_618=tk.Button(root)
         GButton_618["bg"] = "#efefef"
@@ -145,6 +144,11 @@ class App:
 
         self.repo = FormRepository()
         self.rpa = RPAModule()
+        self.scroll = tk.Scrollbar(root)
+        #self.scroll.grid(row=2, column=2, rowspan=6)
+        self.listBox.bind('<<ListboxSelect>>', self.get_selected_row)
+        self.listBox.configure(yscrollcommand=self.scroll)
+        self.scroll.configure(command=self.listBox.yview)
 
     def insert_command(self):
         print("Insert")
@@ -155,10 +159,10 @@ class App:
 
     def update_command(self):
         print("update command")
-        # if (self.url.get() != "" and self.key.get() != "" and self.value.get() != ""):
-        #     FormRepository.FormModel().create_model(self.url.get(), self.key.get(), self.value.get())
-        #     self.reset_inputs()
-        #     self.load_command()
+        if (self.url.get() != "" and self.key.get() != "" and self.value.get() != ""):
+            self.repo.update(self.selected_row[0], self.selected_row[1], self.selected_row[2], self.selected_row[3])
+            self.reset_inputs()
+            self.load_command()
 
     def delete_command(self):
         print("delete command")

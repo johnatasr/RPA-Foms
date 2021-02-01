@@ -22,11 +22,10 @@ class FormRepository:
         self.model.create_model(url, key, value)
         self.dataConnection.insert(self.model)
 
-    def update(self, name: str, key: str, value: str) -> None:
-        self.model.set_url(name)
-        self.model.set_key(key)
-        self.model.set_value(value)
-        self.dataConnection.update(self.model, self.model.format_update_set())
+    def update(self, id: int, url: str, key: str, value: str) -> None:
+        self.model.create_model(url, key, value)
+        self.model.set_id(id)
+        self.dataConnection.update(self.model)
         self.model = None
 
     def delete(self, id: str) -> None:

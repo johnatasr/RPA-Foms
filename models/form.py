@@ -42,14 +42,15 @@ class Form:
         else:
             return f"Empty Model: {self.__name__}"
 
-    def format_update_set(self):
-        return f"name={self.get_name()},key={self.get_key()},value={self.get_value()}"
-
     def create_model(self, url: str, key: str, value: str) -> object:
         self.set_url(url)
         self.set_key(key)
         self.set_value(value)
         return Form
+
+    def update_query_set(self):
+        query: str = f"key='{self.key}', value='{self.value}'"
+        return query
 
     @staticmethod
     def create_table() -> str:

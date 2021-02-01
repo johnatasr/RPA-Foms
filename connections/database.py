@@ -57,10 +57,10 @@ class Database:
         except ValueError as error:
             print(error)
 
-    def update(self, obj_model, str_set):
+    def update(self, obj_model):
         try:
-            self.query = f'update {obj_model.modelTable} set {str_set} where id= {obj_model.get_id()}'
-            self.run_query(self.query)
+            self.query = f'update {obj_model.modelTable()} set {obj_model.update_query_set()} where id= {obj_model.get_id()}'
+            self.__run_query(self.query)
             self.query = None
 
         except ValueError as error:
