@@ -6,9 +6,9 @@ from automation.rpa_automation import RPAModule
 
 class App:
     def __init__(self, root):
-        self.url: str = tk.StringVar(value='https://www.google.com')
-        self.key: str = tk.StringVar(value='//*[@name="q"]')
-        self.value: str = tk.StringVar(value='decentralization[enter]')
+        self.url: str = tk.StringVar()
+        self.key: str = tk.StringVar()
+        self.value: str = tk.StringVar()
         self.msg: str = tk.StringVar()
         self.selected_row = None
 
@@ -151,32 +151,32 @@ class App:
         self.scroll.configure(command=self.listBox.yview)
 
     def insert_command(self):
-        print("Insert")
         if ( self.url.get() != "" and self.key.get() != "" and self.value.get() != "" ):
             self.repo.create(self.url.get(), self.key.get(), self.value.get())
             self.load_command()
             self.reset_inputs()
 
     def update_command(self):
-        print("update command")
         if (self.url.get() != "" and self.key.get() != "" and self.value.get() != ""):
             self.repo.update(self.selected_row[0], self.selected_row[1], self.selected_row[2], self.selected_row[3])
-            self.reset_inputs()
             self.load_command()
+            self.reset_inputs()
 
     def delete_command(self):
-        print("delete command")
         if self.selected_row is not None:
             self.repo.delete(self.selected_row[0])
-            self.reset_command()
             self.load_command()
+            self.reset_inputs()
 
     def execute_command(self):
-        self.rpa.set_list(self.listBox.select_set(0, tk.END))
+        self.rpa.set_registers(self.listBox.get(0, tk.END))
         self.rpa.exec_command()
 
     def reset_command(self):
-        print("call reset")
+        if self.selected_row is not None:
+            self.repo.truncate()
+            self.load_command()
+            self.reset_inputs()
 
     def load_command(self):
         self.listBox.delete(0, tk.END)

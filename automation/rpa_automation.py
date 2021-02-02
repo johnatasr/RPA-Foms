@@ -6,12 +6,12 @@ class RPAModule(object):
         self.rp = rpa
         self.registers = None
 
-    def set_list(self, registers):
+    def set_registers(self, registers):
         self.registers = registers
 
     def exec_command(self):
         self.rp.init()
-        self.rp.url(self.registers[0])
+        self.rp.url(self.registers[0][1])
 
         for command in self.registers:
-            self.rp.type(command[1], command[2])
+            self.rp.type(command[2], command[3])

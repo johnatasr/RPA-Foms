@@ -66,11 +66,14 @@ class Database:
         except ValueError as error:
             print(error)
 
-    def delete(self, obj_model):
+    def delete(self, obj_model, truncate=False):
         try:
-            self.query = f'DELETE FROM {obj_model.get_model_table()} WHERE id={obj_model.get_id()}'
-            self.__run_query(self.query)
+            if truncate is True:
+                self.query = f'DELETE FROM {obj_model.get_model_table()}'
+            else:
+                self.query = f'DELETE FROM {obj_model.get_model_table()} WHERE id={obj_model.get_id()}'
 
+            self.__run_query(self.query)
         except ValueError as error:
             print(error)
 
