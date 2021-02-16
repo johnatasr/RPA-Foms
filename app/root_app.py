@@ -61,7 +61,7 @@ class App:
         GLineEdit_980["font"] = ft
         GLineEdit_980["fg"] = "#333333"
         GLineEdit_980["justify"] = "center"
-        GLineEdit_980["text"] = "url"
+        GLineEdit_980["text"] = self.url
         GLineEdit_980.place(x=30,y=70,width=531,height=30)
 
         GLineEdit_792=tk.Entry(root, textvariable=self.key)
@@ -70,7 +70,7 @@ class App:
         GLineEdit_792["font"] = ft
         GLineEdit_792["fg"] = "#333333"
         GLineEdit_792["justify"] = "center"
-        GLineEdit_792["text"] = "key"
+        GLineEdit_792["text"] = self.key
         GLineEdit_792.place(x=30,y=140,width=183,height=30)
 
         GLineEdit_546=tk.Entry(root, textvariable=self.value)
@@ -79,7 +79,7 @@ class App:
         GLineEdit_546["font"] = ft
         GLineEdit_546["fg"] = "#333333"
         GLineEdit_546["justify"] = "center"
-        GLineEdit_546["text"] = "value"
+        GLineEdit_546["text"] = self.value
         GLineEdit_546.place(x=240,y=140,width=185,height=30)
 
         GButton_898=tk.Button(root)
@@ -151,13 +151,13 @@ class App:
         self.scroll.configure(command=self.listBox.yview)
 
     def insert_command(self):
-        if ( self.url.get() != "" and self.key.get() != "" and self.value.get() != "" ):
+        if self.fields_validation():
             self.repo.create(self.url.get(), self.key.get(), self.value.get())
             self.load_command()
             self.reset_inputs()
 
     def update_command(self):
-        if (self.url.get() != "" and self.key.get() != "" and self.value.get() != ""):
+        if self.fields_validation():
             self.repo.update(self.selected_row[0], self.selected_row[1], self.selected_row[2], self.selected_row[3])
             self.load_command()
             self.reset_inputs()
@@ -169,6 +169,7 @@ class App:
             self.reset_inputs()
 
     def execute_command(self):
+        self.rpa.exit()
         self.rpa.set_registers(self.listBox.get(0, tk.END))
         self.rpa.exec_command()
 
@@ -196,14 +197,15 @@ class App:
     def start_databbase(self):
         self.repo.create_database()
 
-    @classmethod
-    def reset_inputs(cls):
-        print("reset")
-        cls.url.set("")
-        cls.key.set("")
-        cls.value.set("")
+    def reset_inputs(self):
+        self.url.set("")
+        self.key.set("")
+        self.value.set("")
 
-
+    def fields_validation(self):
+        if any(field == "" for field in [self.url.get(), self.key.get(), self.value.get()]):
+            return False
+        else: return True
 
 
 
