@@ -13,6 +13,7 @@ class App:
         self.value: str = tk.StringVar()
         self.msg: str = tk.StringVar()
         self.selected_row = None
+        self.msg.set("")
 
         #setting title
         root.title("RPA Forms v1.0")
@@ -164,7 +165,7 @@ class App:
         try:
             if self.fields_validation():
                 self.msg.set('Inserindo Input ...')
-                self.repo.create(self.url.get(), self.key.get(), self.value.get())
+                self.repo.create(*self.get_input_values())
                 self.load_command()
                 self.reset_inputs()
         except Exception as error:
@@ -176,7 +177,7 @@ class App:
     def update_command(self):
         try:
             if self.fields_validation():
-                self.repo.update(self.selected_row[0], self.selected_row[1], self.selected_row[2], self.selected_row[3])
+                self.repo.update(*self.get_input_values(id=True))
                 self.load_command()
                 self.reset_inputs()
         except Exception as error:
@@ -244,6 +245,14 @@ class App:
             self.value.set(self.selected_row[3])
         except IndexError:
             print("No selected row")
+
+    def get_input_values(self, id=False):
+        args = [self.url.get(), self.key.get(), self.value.get()]
+
+        if id:
+            args.insert(0, self.selected_row[0])
+
+        return args
 
     def start_database(self, *, initialize_app=False):
         try:

@@ -59,7 +59,7 @@ class Database:
 
     def update(self, obj_model):
         try:
-            self.query = f'update {obj_model.modelTable()} set {obj_model.update_query_set()} where id= {obj_model.get_id()}'
+            self.query = f'update {obj_model.modelTable} set {obj_model.update_query_set()} where id= {obj_model.get_id()}'
             self.__run_query(self.query)
             self.query = None
 
