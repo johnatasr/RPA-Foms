@@ -33,4 +33,4 @@ class FormRepository:
         self.dataConnection.delete(self.model)
 
     def truncate(self) -> None:
-        self.dataConnection.truncate(self.model, truncate=True)
+        self.dataConnection.delete(self.model, truncate=True)

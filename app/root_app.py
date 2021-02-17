@@ -2,6 +2,8 @@ import tkinter as tk
 import tkinter.font as tkFont
 from repositories.form_repository import FormRepository
 from automation.rpa_automation import RPAModule
+from exceptions.app_exceptions import AppExcetion
+from time import sleep
 
 
 class App:
@@ -129,7 +131,7 @@ class App:
         GButton_618["fg"] = "#000000"
         GButton_618["justify"] = "center"
         GButton_618["text"] = "Executar"
-        GButton_618.place(x=480,y=320,width=88,height=54)
+        GButton_618.place(x=480,y=270,width=88,height=54)
         GButton_618["command"] = self.execute_command
 
         GButton_324=tk.Button(root)
@@ -139,8 +141,16 @@ class App:
         GButton_324["fg"] = "#000000"
         GButton_324["justify"] = "center"
         GButton_324["text"] = "Resetar"
-        GButton_324.place(x=480,y=420,width=70,height=25)
+        GButton_324.place(x=480,y=380,width=70,height=25)
         GButton_324["command"] = self.reset_command
+
+        GLabel_473 = tk.Label(root)
+        ft = tkFont.Font(family='Times', size=10)
+        GLabel_473["font"] = ft
+        GLabel_473["fg"] = "#333333"
+        GLabel_473["justify"] = "center"
+        GLabel_473["text"] = self.msg
+        GLabel_473.place(x=30, y=470, width=300, height=20)
 
         self.repo = FormRepository()
         self.rpa = RPAModule()
@@ -151,38 +161,79 @@ class App:
         self.scroll.configure(command=self.listBox.yview)
 
     def insert_command(self):
-        if self.fields_validation():
-            self.repo.create(self.url.get(), self.key.get(), self.value.get())
-            self.load_command()
-            self.reset_inputs()
+        try:
+            if self.fields_validation():
+                self.msg.set('Inserindo Input ...')
+                self.repo.create(self.url.get(), self.key.get(), self.value.get())
+                self.load_command()
+                self.reset_inputs()
+        except Exception as error:
+            self.execute_exception(
+                method=self.insert_command.__name__.split('_')[0],
+                error=error,
+            )
 
     def update_command(self):
-        if self.fields_validation():
-            self.repo.update(self.selected_row[0], self.selected_row[1], self.selected_row[2], self.selected_row[3])
-            self.load_command()
-            self.reset_inputs()
+        try:
+            if self.fields_validation():
+                self.repo.update(self.selected_row[0], self.selected_row[1], self.selected_row[2], self.selected_row[3])
+                self.load_command()
+                self.reset_inputs()
+        except Exception as error:
+            self.execute_exception(
+                method=self.update_command.__name__.split('_')[0],
+                error=error,
+            )
 
     def delete_command(self):
-        if self.selected_row is not None:
-            self.repo.delete(self.selected_row[0])
-            self.load_command()
-            self.reset_inputs()
+        try:
+            if self.selected_row is not None:
+                self.msg.set('Deletando Input ...')
+                self.repo.delete(self.selected_row[0])
+                self.load_command()
+                self.reset_inputs()
+        except Exception as error:
+            self.execute_exception(
+                method=self.delete_command.__name__.split('_')[0],
+                error=error,
+            )
 
     def execute_command(self):
-        self.rpa.exit()
-        self.rpa.set_registers(self.listBox.get(0, tk.END))
-        self.rpa.exec_command()
+        try:
+            self.rpa.exit()
+            self.msg.set('Executando ...')
+            self.rpa.set_registers(self.listBox.get(0, tk.END))
+            self.rpa.exec_command()
+        except Exception as error:
+            self.execute_exception(
+                method=self.execute_command.__name__.split('_')[0],
+                error=error,
+            )
 
     def reset_command(self):
-        if self.selected_row is not None:
+        try:
             self.repo.truncate()
             self.load_command()
             self.reset_inputs()
+        except Exception as error:
+            self.execute_exception(
+                method=self.reset_command.__name__.split('_')[0],
+                error=error,
+                args='todos registros'
+            )
 
     def load_command(self):
-        self.listBox.delete(0, tk.END)
-        for row in self.repo.get_all():
-            self.listBox.insert(tk.END, row)
+        try:
+            self.listBox.delete(0, tk.END)
+            self.msg.set('Carrengando ...')
+            for row in self.repo.get_all():
+                self.listBox.insert(tk.END, row)
+        except Exception as error:
+            self.execute_exception(
+                method=self.load_command.__name__.split('_')[0],
+                error=error,
+                args='todos registros'
+            )
 
     def get_selected_row(self, event):
         try:
@@ -194,18 +245,35 @@ class App:
         except IndexError:
             print("No selected row")
 
-    def start_databbase(self):
-        self.repo.create_database()
+    def start_database(self, *, initialize_app=False):
+        try:
+            if initialize_app is False:
+                self.msg.set('Carregando SQlite ...')
+            self.repo.create_database()
+            self.reset_inputs()
+        except Exception as error:
+            self.execute_exception(
+                method=self.start_database.__name__.split('_')[0],
+                error=error,
+                args='SQLite' if initialize_app is False else None
+            )
 
     def reset_inputs(self):
         self.url.set("")
         self.key.set("")
         self.value.set("")
+        self.msg.set("")
 
     def fields_validation(self):
         if any(field == "" for field in [self.url.get(), self.key.get(), self.value.get()]):
             return False
         else: return True
+
+    def execute_exception(self, method, error, args=None):
+        self.msg.set(AppExcetion(method, error, args).__str__())
+        sleep(3)
+        self.reset_inputs()
+        self.load_command()
 
 
 
