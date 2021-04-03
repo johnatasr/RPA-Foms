@@ -3,7 +3,14 @@
   ![](assets/rpa_gif.gif)
   ![](assets/RPA1.JPG)
 
-Projeto desktop cuja finalidade é automatizar inputs de formulários em processo de preenchimento automatico, para testes e finalizades diversas.
+Projeto desktop cuja finalidade é automatizar inputs de formulários em processo de preenchimento automatico, para testes e finalidades diversas.
+
+## Tecnologias
+
+* Python 
+* TKinter
+* RPA
+
 
 ## Requisitos
 
@@ -19,8 +26,8 @@ Passos para configurar o projeto com docker:
 
 ## Como usar
 
-### 1- Você deve inserir a url do formulário 
+### 1- Você deve inserir a URL do formulário 
 ### 2- Depois os respectivos valores do input (HTML) e valor a ser inserido 
-### 3- Caso queria pressionar o enter apenas no value coloque = 'value[enter]' 
-### 4- Clique em Novo que adicionará o registro
+### 3- Caso queria pressionar enter adicione ao lado do value a flag [enter] 
+### 4- Clique em Novo para adicionar um novo registro
 ### 5- Clique em Executar para executar o Robô
