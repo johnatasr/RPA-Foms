@@ -21,7 +21,7 @@ class Database:
                 string_value = string_value + f"'{value}'"
                 first = False
             else:
-                string_value = string_value + ', ' + f"'{value}'"
+                string_value = string_value + ", " + f"'{value}'"
 
         return string_value
 
@@ -39,7 +39,7 @@ class Database:
 
     def insert(self, obj_model):
         try:
-            values_str, cols_values, objs_variables = '', '', vars(obj_model)
+            values_str, cols_values, objs_variables = "", "", vars(obj_model)
             model_table: str = objs_variables['modelTable']
             columns = []
             for item in objs_variables:

@@ -38,7 +38,7 @@ class Form:
 
     def get_all_values(self):
         if all([self.url, self.key, self.value]):
-            return [self.url, self.key, self.value]
+           return [self.url, self.key, self.value]
         else:
             return f"Empty Model: {self.__name__}"
 
@@ -46,9 +46,9 @@ class Form:
         self.set_url(url)
         self.set_key(key)
         self.set_value(value)
-        return Form
+        return self
 
-    def update_query_set(self):
+    def update_query_set(self) -> str:
         query: str = f"key='{self.key}', value='{self.value}'"
         return query
 

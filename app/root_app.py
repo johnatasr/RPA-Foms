@@ -11,9 +11,7 @@ class App:
         self.url: str = tk.StringVar()
         self.key: str = tk.StringVar()
         self.value: str = tk.StringVar()
-        self.msg: str = tk.StringVar()
         self.selected_row = None
-        self.msg.set("")
 
         #setting title
         root.title("RPA Forms v1.0")
@@ -150,13 +148,12 @@ class App:
         GLabel_473["font"] = ft
         GLabel_473["fg"] = "#333333"
         GLabel_473["justify"] = "center"
-        GLabel_473["text"] = self.msg
         GLabel_473.place(x=30, y=470, width=300, height=20)
+        self.status = GLabel_473
 
         self.repo = FormRepository()
         self.rpa = RPAModule()
         self.scroll = tk.Scrollbar(root)
-        #self.scroll.grid(row=2, column=2, rowspan=6)
         self.listBox.bind('<<ListboxSelect>>', self.get_selected_row)
         self.listBox.configure(yscrollcommand=self.scroll)
         self.scroll.configure(command=self.listBox.yview)
@@ -164,7 +161,7 @@ class App:
     def insert_command(self):
         try:
             if self.fields_validation():
-                self.msg.set('Inserindo Input ...')
+                self.update_status('Inserindo Input ...')
                 self.repo.create(*self.get_input_values())
                 self.load_command()
                 self.reset_inputs()
@@ -189,7 +186,7 @@ class App:
     def delete_command(self):
         try:
             if self.selected_row is not None:
-                self.msg.set('Deletando Input ...')
+                self.update_status('Deletando Input ...')
                 self.repo.delete(self.selected_row[0])
                 self.load_command()
                 self.reset_inputs()
@@ -201,10 +198,14 @@ class App:
 
     def execute_command(self):
         try:
+            if self.is_empty_registry():
+                return self.update_status('Lista não pode estar vazia')
+
             self.rpa.exit()
-            self.msg.set('Executando ...')
+            self.update_status('Executando ...')
             self.rpa.set_registers(self.listBox.get(0, tk.END))
             self.rpa.exec_command()
+            self.update_status('')
         except Exception as error:
             self.execute_exception(
                 method=self.execute_command.__name__.split('_')[0],
@@ -226,9 +227,10 @@ class App:
     def load_command(self):
         try:
             self.listBox.delete(0, tk.END)
-            self.msg.set('Carrengando ...')
+            self.update_status('Carrengando ...')
             for row in self.repo.get_all():
                 self.listBox.insert(tk.END, row)
+            self.update_status('Pronto, tudo OK')
         except Exception as error:
             self.execute_exception(
                 method=self.load_command.__name__.split('_')[0],
@@ -257,7 +259,7 @@ class App:
     def start_database(self, *, initialize_app=False):
         try:
             if initialize_app is False:
-                self.msg.set('Carregando SQlite ...')
+                self.update_status('Carregando SQlite ...')
             self.repo.create_database()
             self.reset_inputs()
         except Exception as error:
@@ -271,7 +273,7 @@ class App:
         self.url.set("")
         self.key.set("")
         self.value.set("")
-        self.msg.set("")
+        self.update_status('')
 
     def fields_validation(self):
         if any(field == "" for field in [self.url.get(), self.key.get(), self.value.get()]):
@@ -279,10 +281,18 @@ class App:
         else: return True
 
     def execute_exception(self, method, error, args=None):
-        self.msg.set(AppExcetion(method, error, args).__str__())
+        self.update_status(AppExcetion(method, error, args).__str__())
         sleep(3)
         self.reset_inputs()
         self.load_command()
+
+    def update_status(self, msg: str):
+        self.status.config(text=msg)
+
+    def is_empty_registry(self):
+        if isinstance(self.listBox.get(0), str):
+            return True
+        else: False
 
 
 
